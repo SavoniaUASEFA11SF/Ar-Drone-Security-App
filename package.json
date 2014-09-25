@@ -1,0 +1,19 @@
+{
+  "name": "destroyer_of_worlds",
+  "version": "1.0.0",
+  "description": "Savonia AMK's project to bring military-grade drone equipment to universities around the world.",
+  "main": "index.js",
+  "dependencies": {
+    "ar-drone": "^0.3.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "run test"
+  },
+  "keywords": [
+    "AR_Drone",
+    "Node"
+  ],
+  "author": "Lordink, Tripsi, Kacka",
+  "license": "ISC"
+}
