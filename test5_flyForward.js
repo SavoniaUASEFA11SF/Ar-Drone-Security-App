@@ -20,7 +20,7 @@ setTimeout(function(){
   console.log('Landing ...');
   ref.fly = false;
   pcmd = {};
-}, 8000)
+}, 12000) //TODO delay in a way that he fuken lands 
 
 setInterval(function(){
   control.ref(ref);
