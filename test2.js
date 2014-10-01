@@ -11,8 +11,10 @@ client.takeoff();
 
 client.after(3000, function(){
   this.animate('flipLeft', 15);
+  console.log('Now the flip happens');
 })
 .after(1500, function(){
+  console.log('now we stop, okda');
   this.stop();
   this.land();
 });
