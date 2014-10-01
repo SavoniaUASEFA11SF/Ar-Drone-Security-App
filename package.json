@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "description": "Savonia AMK's project to bring military-grade drone equipment to universities around the world.",
   "main": "index.js",
+  "repository":{
+    "type": "git",
+    "url": "git://github.com/SavoniaUASEFA11SF/Ar-Drone-Security-App.git"
+  }
   "dependencies": {
     "ar-drone": "^0.3.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "^1.21.4"
+  },
   "scripts": {
     "test": "run test"
   },
