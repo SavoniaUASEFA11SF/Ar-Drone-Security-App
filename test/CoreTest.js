@@ -1,5 +1,5 @@
 "use strict";
-var mocha  = require("mocha");
+
 var  chai   = require("chai"),
     expect = chai.expect,
     assert = chai.assert,
@@ -21,7 +21,7 @@ describe('Ar-Drone FlightCore module', function(){
         //TODO beforeEach separate require core.
     });
 
-    describe('State manager', function(){
+    describe('state manager', function(){
 
         it('should have get/set functions', function(){
             var stateMan = new FC._stateManager();
@@ -40,11 +40,17 @@ describe('Ar-Drone FlightCore module', function(){
                 stateMan.set(stateMan.states[i]);
                 stateMan.get().should.equal(stateMan.states[i]);
             }
+        });
+
+        it('should throw an error while setting its state to the unknown state.', function(){
+            var stateMan = new FC._stateManager();
+            var setWrongState = function(){ stateMan.set('stuff'); }
+
+            expect(setWrongState).to.throw("Unknown state!");
         })
 
         it('should be running upon FlightCore init and have an "off" state', function(){
             expect(FC.$flightState).to.exist;
-
             expect(FC.$flightState.get()).to.equal('off');
         });
     })
