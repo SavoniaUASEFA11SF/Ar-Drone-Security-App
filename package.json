@@ -2,7 +2,7 @@
   "name": "destroyer_of_worlds",
   "version": "1.0.0",
   "description": "Savonia AMK's project to bring military-grade drone equipment to universities around the world.",
-  "main": "index.js",
+  "main": "FlightCore.js",
   "dependencies": {
     "ar-drone": "^0.3.2"
   },
