@@ -2,16 +2,17 @@
   "name": "destroyer_of_worlds",
   "version": "1.0.0",
   "description": "Savonia AMK's project to bring military-grade drone equipment to universities around the world.",
-  "main": "index.js",
-  "repository":{
-    "type": "git",
-    "url": "git://github.com/SavoniaUASEFA11SF/Ar-Drone-Security-App.git"
-  }
+  "main": "FlightCore.js",
   "dependencies": {
     "ar-drone": "^0.3.2"
   },
   "devDependencies": {
-    "mocha": "^1.21.4"
+    "chai": "^1.9.2",
+    "grunt": "^0.4.5",
+    "grunt-mocha-test": "^0.12.1",
+    "load-grunt-tasks": "^0.6.0",
+    "mocha": "^1.21.4",
+    "time-grunt": "^1.0.0"
   },
   "scripts": {
     "test": "run test"
