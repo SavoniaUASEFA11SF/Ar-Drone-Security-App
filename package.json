@@ -6,7 +6,14 @@
   "dependencies": {
     "ar-drone": "^0.3.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^1.9.2",
+    "grunt": "^0.4.5",
+    "grunt-mocha-test": "^0.12.1",
+    "load-grunt-tasks": "^0.6.0",
+    "mocha": "^1.21.4",
+    "time-grunt": "^1.0.0"
+  },
   "scripts": {
     "test": "run test"
   },

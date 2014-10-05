@@ -48,10 +48,12 @@
         if(state === undefined)
             state = 'off'
         this.currentState = state;
+
+        //Allowed states:
         this.states = ['off', 'takingOff', 'airborne', 'landing'];
 
         ///Will be instantiated for each object, but we have singleton, so no problem there.
-        this.get= function(){
+        this.get = function(){
             return this.currentState;
         }
         this.set = function(newState){
