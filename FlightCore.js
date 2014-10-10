@@ -23,14 +23,15 @@
     Node.$flightControl = $flightControl;
     Node.$flightState = stateControl;
 
-
     //Initialize drone variables and connection here.
     function init(){
+       var arDrone = {},
+           control = {};
         try{
-            var arDrone = require('ar-drone');
-            var control = arDrone.createUdpControl();
+            arDrone = require('ar-drone');
+            control = arDrone.createUdpControl();
         }catch(err){
-            console.log(" _init error: " + err.message)
+            console.log(" _init error: " + err.message);
         }
 
         //ref object
@@ -46,7 +47,7 @@
     function stateManager(state){
 
         if(state === undefined)
-            state = 'off'
+            state = 'off';
         this.currentState = state;
 
         //Allowed states:
@@ -55,13 +56,13 @@
         ///Will be instantiated for each object, but we have singleton, so no problem there.
         this.get = function(){
             return this.currentState;
-        }
+        };
         this.set = function(newState){
             if(this.states.indexOf(newState) !== -1)
                 this.currentState = newState;
             else
                 throw new Error("Unknown state!");
-        }
+        };
     }
     Node._stateManager = stateManager;
 
