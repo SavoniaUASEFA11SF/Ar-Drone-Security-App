@@ -1,6 +1,10 @@
 "use strict";
 
-var chai = require("chai"), expect = chai.expect, assert = chai.assert, should = chai.should(), FC = require("../FlightCore.js");
+var chai = require("chai"),
+    expect = chai.expect,
+    assert = chai.assert,
+    should = chai.should(),
+    FC = require("../FlightCore.js");
 
 describe('Ar-Drone FlightCore module', function () {
     describe('upon initialization', function () {
@@ -28,7 +32,7 @@ describe('Ar-Drone FlightCore module', function () {
     describe('state manager', function () {
 
         it('should have get/set functions', function () {
-            var stateMan = new FC._stateManager();
+            var stateMan = new FC._stateManager;
 
             stateMan.should.respondTo('get');
             stateMan.should.respondTo('set');
@@ -64,6 +68,7 @@ describe('Ar-Drone FlightCore module', function () {
         var takeOffCommand = {name:"Take Off", delay: 3000};
         var landCommand = {name:"Land", delay: 3000};
 
+
         beforeEach(function(done){
             //This will fail, until you actually create a _flightQueue function/class.
              cQ = new FC._flightQueue();
@@ -72,6 +77,7 @@ describe('Ar-Drone FlightCore module', function () {
 
         it('should successfully instantiate the queue and its data should be an empty array.', function () {
             expect(cQ).to.not.be.undefined;
+            expect(cQ.data).to.exist;
             expect(cQ.data).to.be.empty;
         });
 
@@ -81,7 +87,8 @@ describe('Ar-Drone FlightCore module', function () {
         });
 
         it('should have add and remove methods to add and remove commands from the current queue.', function(){
-            expect(cQ).to.respondTo('add').and.to.respondTo('remove');
+            expect(cQ).to.respondTo('add');
+            expect(cQ).to.respondTo('remove');
         })
 
         it('would accept addition of TakeOff and Land commands, after which the commands should be in its data array', function(){

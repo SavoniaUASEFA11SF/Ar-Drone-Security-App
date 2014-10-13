@@ -67,6 +67,31 @@
     }
     Node._stateManager = stateManager;
 
+    function flightQueue(){
+      this.data = [];
+      this.commands = [ {name:"Take Off", delay: 3000},
+                        {name:"Land", delay: 3000} ];
+      this.add = function(commandName){
+        for(var i = 0; i < this.commands.length; i++){
+          if (this.commands[i].name == commandName){
+            this.data.push(this.commands[i]);
+            break;
+          }
+        }
+      }
+
+      this.remove = function(commandName){
+        for(var i = 0; i < this.commands.length; i++){
+          if (this.commands[i].name == commandName){
+            this.data.splice(i, 1);
+            break;
+          }
+        }
+      }
+
+    };
+
+    Node._flightQueue = flightQueue;
 
 })();
 
