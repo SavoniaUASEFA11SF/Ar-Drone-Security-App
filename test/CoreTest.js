@@ -94,6 +94,9 @@ describe('Ar-Drone FlightCore module', function () {
             expect(cQ.data).to.include(landCommand);
         });
 
-        //it('should be a part of FlightCore object ') ///TODO
+        it('should throw an error, if an unknown command is added', function(){
+            var wrong = function(){ cQ.add("Stuff") };
+            expect(wrong).to.throw("Unknown Command!");
+        });
     });
 })

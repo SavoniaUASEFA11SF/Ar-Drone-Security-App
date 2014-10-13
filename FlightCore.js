@@ -46,11 +46,10 @@
     //Singleton for the state control
     function stateManager(state){
 
-
-        //TODO CHECK that state's frmo states list.
-        if(state === undefined)
+        if(state === undefined || (this.states.indexOf(state) === -1))
             state = 'off';
-        this.currentState = state;
+        else
+            this.currentState = state;
 
         //Allowed states:
         this.states = ['off', 'takingOff', 'airborne', 'landing'];
