@@ -50,14 +50,13 @@
     //Singleton for the state control
     function stateManager(state){
 
+        //Allowed states:
+        this.states = ['off', 'takingOff', 'airborne', 'landing'];
+
         if(state === undefined || (this.states.indexOf(state) === -1))
             state = 'off';
         else
             this.currentState = state;
-
-        //Allowed states:
-        this.states = ['off', 'takingOff', 'airborne', 'landing'];
-
         ///Will be instantiated for each object, but we have singleton, so no problem there.
         this.get = function(){
             return this.currentState;
