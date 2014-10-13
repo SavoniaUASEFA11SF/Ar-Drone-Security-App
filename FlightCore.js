@@ -18,10 +18,14 @@
     //All the data stream about current drone operations
         $flightData  = {},
         stateControl = new stateManager('off');
+        $flightQueue = new flightQueue;
 
     Node._flightData = $flightData;
     Node.$flightControl = $flightControl;
     Node.$flightState = stateControl;
+    Node.getFlightQueue = function(){
+      return $flightQueue
+    };
 
 
     //Initialize drone variables and connection here.
