@@ -46,6 +46,8 @@
     //Singleton for the state control
     function stateManager(state){
 
+
+        //TODO CHECK that state's frmo states list.
         if(state === undefined)
             state = 'off';
         this.currentState = state;
