@@ -105,5 +105,15 @@ describe('Ar-Drone FlightCore module', function () {
             var wrong = function(){ cQ.add("Stuff") };
             expect(wrong).to.throw("Unknown Command!");
         });
+
+        it("would be able to remove the element from the queue after we added it there, and will return null if we try to remove non-existing element", function(){
+            cQ.add("Take Off");
+            var removed = cQ.remove("Take Off");
+            expect(cQ.data).to.be.empty;
+            removed.should.be.ok;
+
+            var removedWrong = cQ.remove("Stuff");
+            removedWrong.should.not.be.ok;
+        });
     });
 })
