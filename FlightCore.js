@@ -59,20 +59,25 @@
 
         //Allowed states:
         this.states = ['off', 'takingOff', 'airborne', 'landing'];
+        //The state to be executed
+        this.currentState = null;
         //future container for the refresh interval id, which is needed to stop the refresh loop
         this.refreshIntervalId = null;
 
         if (state === undefined || (this.states.indexOf(state) === -1))
-            state = 'off'; else
+            state = 'off'; 
+        else
             this.currentState = state;
         ///Will be instantiated for each object, but we have singleton, so no problem there.
         this.get = function () {
             return this.currentState;
         };
         this.set = function (newState) {
-            if (this.states.indexOf(newState) !== -1)
-                this.currentState = newState; else
+            if (this.states.indexOf(newState) === -1){
                 throw new Error("Unknown state!");
+            }
+
+            this.currentState = newState;
         };
 
         //setInterval'd loop, invoked from the init function. Is capable of killing itself, if needed.
