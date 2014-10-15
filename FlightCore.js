@@ -39,12 +39,13 @@
         }
 
         if (!isNaN(direction.angle) && !isNaN(direction.duration))  {
-          $flightQueue.add("Custom Direction", direction)
+          $flightQueue.add("Custom Direction", direction);
           return true;
         }
         else
           return false;
     }
+    Node.fly = fly;
 
     //Initialize drone variables and connection here.
     function init() {

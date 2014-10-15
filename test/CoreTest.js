@@ -31,7 +31,10 @@ describe('Ar-Drone FlightCore module', function () {
     describe('Drone command facades', function(){
        describe('fly() facade', function(){
           it('should accept arguments: string; string and number; object with angle and duration fields. Nothing else.', function(){
-              expect(FC.fly).to.not.throw(Error);
+              var fly_with_String = function(){
+                FC.fly("Forward");
+              };
+              expect(fly_with_String).to.not.throw(Error);
           });
        }); 
     });
@@ -62,7 +65,7 @@ describe('Ar-Drone FlightCore module', function () {
             var setWrongState = function () { stateMan.set('stuff'); }
 
             expect(setWrongState).to.throw("Unknown state!");
-        })
+        });
 
         it('should be running upon FlightCore init and have an "off" state', function () {
             expect(FC.$flightState).to.exist;
