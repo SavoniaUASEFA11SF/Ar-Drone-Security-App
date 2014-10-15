@@ -14,18 +14,24 @@
     var Node = module.exports;
 
     //Internal flight controlling methods
-    var $flightControl = {}, //All the data stream about current drone operations
-        $flightData = {},
+    var $flightData = {},
         stateControl = new stateManager('off'),
-       $flightQueue = new flightQueue();
+        $flightQueue = new flightQueue();
 
     Node._flightData = $flightData;
-    Node.$flightControl = $flightControl;
     Node.$flightState = stateControl;
 
     Node.getFlightQueue = function () {
         return $flightQueue;
     };
+
+    function fly(direction, delay)  {
+      if(delay === undefined)
+        delay = null;
+        $flightQueue.add()
+
+
+    }
 
     //Initialize drone variables and connection here.
     function init() {
@@ -45,11 +51,10 @@
         $flightData.$ref = {};
         $flightData.$pcmd = {};
 
-        $flightControl.$arDrone = arDrone;
-        $flightControl.$udpController = control;
-
         if(!error)
           $flightControl.refreshIntervalId = setInterval($flightControl.refreshLoop, 1000);
+        $flightData.$arDrone = arDrone;
+        $flightData.$udpController = control;
     }
 
     Node.init = init;
@@ -91,14 +96,21 @@
     function flightQueue() {
         this.data = [];
         this.commands = [
-            { name: "Take Off", delay: 3000 },
-            { name: "Land",     delay: 3000 }
+            { name: "Take Off",         delay: 3000 },
+            { name: "Land",             delay: 3000 },
+            { name: "Fly in direction", delay: -1, direction: 0}
         ];
-        this.add = function (commandName) {
+        this.add = function (commandName, delay) {
           var foundCommand = false;
             for (var i = 0; i < this.commands.length; i++) {
                 if (this.commands[i].name == commandName) {
+                  if (delay !== undefined)  {
+                    this.data.push({ name: commandName, delay: delay })
+                  }
+                  else {
                     this.data.push(this.commands[i]);
+                  }
+
                     foundCommand = true;
                     break;
                 }
