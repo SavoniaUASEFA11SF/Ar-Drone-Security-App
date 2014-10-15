@@ -76,22 +76,32 @@
             { name: "Land",     delay: 3000 }
         ];
         this.add = function (commandName) {
-
+          var foundCommand = false;
             for (var i = 0; i < this.commands.length; i++) {
                 if (this.commands[i].name == commandName) {
                     this.data.push(this.commands[i]);
+                    foundCommand = true;
                     break;
                 }
             }
+          if (!foundCommand)  {
+            throw new Error ('Unknown Command!');
+          }
         };
 
         this.remove = function (commandName) {
+          var foundCommand = false;
             for (var i = 0; i < this.commands.length; i++) {
                 if (this.commands[i].name == commandName) {
                     this.data.splice(i, 1);
+                    foundCommand = true;
                     break;
                 }
             }
+            if (!foundCommand)  {
+              return false; }
+              else {
+                return true; }
         };
 
     }
