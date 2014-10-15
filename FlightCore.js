@@ -37,7 +37,7 @@
           $flightQueue.add(direction, delay);
         return true;
         }
-
+        //TODO: check the fact that angle and duration do exist! Otherwise, you get a thow TypeError, which is not what we want.
         if (!isNaN(direction.angle) && !isNaN(direction.duration))  {
           $flightQueue.add("Custom Direction", direction);
           return true;

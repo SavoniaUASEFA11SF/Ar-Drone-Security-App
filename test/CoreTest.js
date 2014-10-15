@@ -23,18 +23,29 @@ describe('Ar-Drone FlightCore module', function () {
 
             //Check, if it's truly a singleton (i.e. the same object, no matter how much times you call for it)
             expect(FC.getFlightQueue()).to.be.equal(FC.getFlightQueue());
-        })
+        });
 
         //TODO beforeEach separate require core.
     });
 
     describe('Drone command facades', function(){
        describe('fly() facade', function(){
-          it('should accept arguments: string; string and number; object with angle and duration fields. Nothing else.', function(){
+
+         it('should return false and not throw an error, if called with no arguments',function(){
+            var fly_Empty = function(){
+                return FC.fly();
+            };
+            expect(fly_Empty).to.not.throw(Error);
+            //Just check fo false
+            expect(FC.fly()).to.equal(false);
+         });
+
+          it('should accept string "Forward" as an argument and return true, as it adds to a queue.', function(){
               var fly_with_String = function(){
                 FC.fly("Forward");
               };
               expect(fly_with_String).to.not.throw(Error);
+              expect(FC.fly("Forward")).to.equal(true);
           });
        }); 
     });
