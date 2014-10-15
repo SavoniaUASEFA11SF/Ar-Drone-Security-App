@@ -24,7 +24,7 @@
     Node.$flightState = stateControl;
 
     Node.getFlightQueue = function () {
-        return flightQueue;
+        return $flightQueue;
     };
 
     //Initialize drone variables and connection here.
