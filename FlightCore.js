@@ -51,10 +51,14 @@
         $flightData.$ref = {};
         $flightData.$pcmd = {};
 
-        if(!error)
-          $flightControl.refreshIntervalId = setInterval($flightControl.refreshLoop, 1000);
         $flightData.$arDrone = arDrone;
         $flightData.$udpController = control;
+
+        if(error)
+          return false;
+
+        $flightControl.refreshIntervalId = setInterval($flightControl.refreshLoop, 1000);
+        return true;
     }
 
     Node.init = init;
@@ -82,7 +86,13 @@
                 throw new Error("Unknown state!");
             }
 
-            this.currentState = newState;
+            //Translate the state information into ref and pcmd object
+            
+        };
+       //Send our pcmd and ref packages to drone controller 
+        this.processDroneData = function(){
+           $flightData.$ref = ref;
+           $flightData.$pcmd = pcmd;
         };
 
         //setInterval'd loop, invoked from the init function. Is capable of killing itself, if needed.
