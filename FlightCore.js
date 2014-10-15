@@ -17,7 +17,7 @@
     var $flightControl = {}, //All the data stream about current drone operations
         $flightData = {},
         stateControl = new stateManager('off'),
-        flightQueue = new flightQueue;
+       $flightQueue = new flightQueue();
 
     Node._flightData = $flightData;
     Node.$flightControl = $flightControl;
@@ -83,7 +83,7 @@
                     break;
                 }
             }
-        }
+        };
 
         this.remove = function (commandName) {
             for (var i = 0; i < this.commands.length; i++) {
@@ -92,9 +92,9 @@
                     break;
                 }
             }
-        }
+        };
 
-    };
+    }
 
     Node._flightQueue = flightQueue;
 

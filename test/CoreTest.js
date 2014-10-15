@@ -116,4 +116,4 @@ describe('Ar-Drone FlightCore module', function () {
             removedWrong.should.not.be.ok;
         });
     });
-})
+});
