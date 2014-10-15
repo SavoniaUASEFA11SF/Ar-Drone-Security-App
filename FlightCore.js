@@ -26,10 +26,13 @@
     };
 
     function fly(direction, delay)  {
-      if(delay === undefined)
-        delay = null;
-        $flightQueue.add()
-
+        if ((direction !== "Forward") && (direction !== "Backwards") && (direction != "Left") && (direction != "Right")) {
+          return false;
+        }
+        if(delay === undefined)
+          $flightQueue.add(direction)
+        else
+          $flightQueue.add(direction, delay)
 
     }
 
@@ -108,7 +111,10 @@
         this.commands = [
             { name: "Take Off",         delay: 3000 },
             { name: "Land",             delay: 3000 },
-            { name: "Fly in direction", delay: -1, direction: 0}
+            { name: "Forward",          delay: -1},
+            { name: "Backwards",        delay: -1},
+            { name: "Left",             delay: -1},
+            { name: "Right",            delay: -1},
         ];
         this.add = function (commandName, delay) {
           var foundCommand = false;
