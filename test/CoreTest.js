@@ -28,6 +28,13 @@ describe('Ar-Drone FlightCore module', function () {
         //TODO beforeEach separate require core.
     });
 
+    describe('Drone command facades', function(){
+       describe('fly() facade', function(){
+          it('should accept arguments: string; string and number; object with angle and duration fields. Nothing else.', function(){
+              expect(FC.fly).to.not.throw(Error);
+          });
+       }); 
+    });
 
     describe('state manager', function () {
 
@@ -64,13 +71,13 @@ describe('Ar-Drone FlightCore module', function () {
     });
 
     describe('drone flight queue', function () {
-        var cQ;
-        var takeOffCommand = {name:"Take Off", delay: 3000};
-        var landCommand = {name:"Land", delay: 3000};
-        var forwardCommand = {name: "Forward", delay: -1};
-        var backwardsCommand = {name: "Backwards", delay: -1};
-        var leftCommand = {name: "Left", delay: -1};
-        var rightCommand = {name: "Right", delay: -1};
+        var cQ,
+         takeOffCommand = {name:"Take Off", delay: 3000},
+         landCommand = {name:"Land", delay: 3000},
+         forwardCommand = {name: "Forward", delay: -1},
+         backwardsCommand = {name: "Backwards", delay: -1},
+         leftCommand = {name: "Left", delay: -1},
+         rightCommand = {name: "Right", delay: -1};
 
 
 
