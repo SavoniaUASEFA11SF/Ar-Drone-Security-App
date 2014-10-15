@@ -60,7 +60,7 @@
         if(error)
           return false;
 
-        $flightControl.refreshIntervalId = setInterval($flightControl.refreshLoop, 1000);
+        stateControl.refreshIntervalId = setInterval(stateControl.refreshLoop, 1000);
         return true;
     }
 
@@ -77,7 +77,7 @@
         this.refreshIntervalId = null;
 
         if (state === undefined || (this.states.indexOf(state) === -1))
-            state = 'off'; 
+            this.currentState = 'off'; 
         else
             this.currentState = state;
         ///Will be instantiated for each object, but we have singleton, so no problem there.
@@ -90,12 +90,19 @@
             }
 
             //Translate the state information into ref and pcmd object
-            
+           this.currentState = newState;
+
+           $flightData.$ref = {}; //TODO
+           $flightData.$pcmd = {}; //TODO
+
+           this.processDroneData();
         };
        //Send our pcmd and ref packages to drone controller 
         this.processDroneData = function(){
-           $flightData.$ref = ref;
-           $flightData.$pcmd = pcmd;
+           $flightData.$udpController.ref($flightData.$ref);
+           $flightData.$udpController.pcmd($flightData.$pcmd);
+
+           $flightData.$udpController.flush();
         };
 
         //setInterval'd loop, invoked from the init function. Is capable of killing itself, if needed.
