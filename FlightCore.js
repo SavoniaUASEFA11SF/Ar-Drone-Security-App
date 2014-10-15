@@ -26,14 +26,24 @@
     };
 
     function fly(direction, delay)  {
+      if (typeof direction === "string") {
+
         if ((direction !== "Forward") && (direction !== "Backwards") && (direction != "Left") && (direction != "Right")) {
           return false;
         }
         if(delay === undefined)
-          $flightQueue.add(direction)
+          $flightQueue.add(direction);
         else
-          $flightQueue.add(direction, delay)
+          $flightQueue.add(direction, delay);
+        return true;
+        }
 
+        if (!isNaN(direction.angle) && !isNaN(direction.duration))  {
+          $flightQueue.add("Custom Direction", direction)
+          return true;
+        }
+        else
+          return false;
     }
 
     //Initialize drone variables and connection here.
@@ -47,7 +57,7 @@
             control = arDrone.createUdpControl();
         } catch (err) {
             console.log(" _init error: " + err.message);
-            error = err; 
+            error = err;
         }
 
         //ref object
@@ -77,7 +87,7 @@
         this.refreshIntervalId = null;
 
         if (state === undefined || (this.states.indexOf(state) === -1))
-            state = 'off'; 
+            state = 'off';
         else
             this.currentState = state;
         ///Will be instantiated for each object, but we have singleton, so no problem there.
@@ -90,9 +100,9 @@
             }
 
             //Translate the state information into ref and pcmd object
-            
+
         };
-       //Send our pcmd and ref packages to drone controller 
+       //Send our pcmd and ref packages to drone controller
         this.processDroneData = function(){
            $flightData.$ref = ref;
            $flightData.$pcmd = pcmd;
@@ -100,7 +110,7 @@
 
         //setInterval'd loop, invoked from the init function. Is capable of killing itself, if needed.
         this.refreshLoop = function(){
-             
+
         };
     }
 
