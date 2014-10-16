@@ -25,6 +25,9 @@
         return $flightQueue;
     };
 
+    // fly("forward")
+    // fly("forward", 500)
+    // fly({ angle: 120, duration: 500});
     function fly(direction, delay)  {
       if (typeof direction === "string") {
 
@@ -124,6 +127,9 @@
 
     Node._stateManager = stateManager;
 
+    stuf = new flightQueue();
+    stuf.add("forward");
+
     function flightQueue() {
         this.data = [];
         this.commands = [
@@ -139,13 +145,11 @@
             for (var i = 0; i < this.commands.length; i++) {
                 if (this.commands[i].name == commandName) {
                   if (delay !== undefined)  {
-                    this.data.push({ name: commandName, delay: delay })
+                    this.data.push({ name: commandName, delay: delay });
                   }
-                  else {
+                  else 
                     this.data.push(this.commands[i]);
-                  }
 
-                    foundCommand = true;
                     break;
                 }
             }
