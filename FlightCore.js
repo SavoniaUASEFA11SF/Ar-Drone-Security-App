@@ -20,7 +20,7 @@
 
     //A middleware between flight queue and drone. Uses state manager to control the situtation and make non-ambiguous decisions.
     var $droneDispatch = {
-            process: function(callback){
+            process: function(command, callback){
                 //TODO.
                 // Logic for processing the fact that first we have to get into air
                 // Or fly straight on.
@@ -169,7 +169,6 @@
                     break;
                 }
             }
-            //TODO: analyze the type of command before pushing it, and if essential - make a sophisticated decision.
           if (!foundCommand)
             throw new Error ('Unknown Command!');
           else{
@@ -186,7 +185,13 @@
         this.processCommand = function(){
             var that = this;
 
-            $droneDispatch.process(this.data[0], function(){
+            // do stuff after time.
+            $droneDispatch.process(this.data[0], function(executedCommand){
+                // If for some fucked up reason we now have different command
+                // as our first-to-go command, throw up about that.
+                if(executedCommand !== this.data[0])
+                    throw new Error("Queue modified/deleted while processing command!");
+                // If not, just shift the shit out of it, and process next command if there is any.
                 that.data.shift();
                 if(data.length > 0)
                     that.processCommand();
