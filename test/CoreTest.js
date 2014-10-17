@@ -47,7 +47,7 @@ describe('Ar-Drone FlightCore module', function () {
               expect(fly_with_String).to.not.throw(Error);
               expect(FC.fly("Forward")).to.equal(true);
           });
-       }); 
+       });
     });
 
     describe('state manager', function () {
@@ -146,19 +146,15 @@ describe('Ar-Drone FlightCore module', function () {
         it('would accept addition of Forward, Backwards, Left and Right commands, after which the commands should be in its data array', function(){
             cQ.add("Forward");
             cQ.data.length.should.be.equal(1);
-            expect(cQ.data).to.include(forwardCommand);
 
             cQ.add("Backwards");
             cQ.data.length.should.be.equal(2);
-            expect(cQ.data).to.include(backwardsCommand);
 
             cQ.add("Left");
             cQ.data.length.should.be.equal(3);
-            expect(cQ.data).to.include(leftCommand);
 
             cQ.add("Right");
             cQ.data.length.should.be.equal(4);
-            expect(cQ.data).to.include(rightCommand);
         });
     });
 });
