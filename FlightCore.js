@@ -20,8 +20,23 @@
 
     //A middleware between flight queue and drone. Uses state manager to control the situtation and make non-ambiguous decisions.
     var $droneDispatch = {
-            process: function(){
-
+            process: function(callback){
+                //TODO.
+                // Logic for processing the fact that first we have to get into air
+                // Or fly straight on.
+                callback();
+            },
+            isBusy: function(){
+                if(stateControl.get() == 'takingOff' || stateControl.get() == 'landing')
+                    return true;
+                else
+                    return false;
+            },
+            isFlying: function(){
+                if(stateControl.get() == 'airborne')
+                    return true;
+                else
+                    return false;
             }
     }
 
@@ -128,7 +143,6 @@
     Node._stateManager = stateManager;
 
     function flightQueue() {
-        this.isBusy = false;
         this.data = [];
         // comman types:
         // @type 0 - essential command. Affects the whole
@@ -158,6 +172,25 @@
             //TODO: analyze the type of command before pushing it, and if essential - make a sophisticated decision.
           if (!foundCommand)
             throw new Error ('Unknown Command!');
+          else{
+              // if the drone is already busy, then, well,
+              // we just leave and hope that callback will be there for us.
+              // Right?
+              // If our command is urgent, let's force send it anyway.
+              if((!$droneDispatch.isBusy()) || (this.data[0].type === 0))
+                this.processCommand();
+          }
+
+        };
+
+        this.processCommand = function(){
+            var that = this;
+
+            $droneDispatch.process(this.data[0], function(){
+                that.data.shift();
+                if(data.length > 0)
+                    that.processCommand();
+            });
         };
 
         this.remove = function (commandName) {
