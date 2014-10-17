@@ -157,7 +157,7 @@
             }
  //TODO: analyze the type of command before pushing it, and if essential - make a sophisticated decision.
             if (!foundCommand)
-                throw new Error('Unknown Command!');
+                return null;
         };
 
         this.remove = function (commandName) {
