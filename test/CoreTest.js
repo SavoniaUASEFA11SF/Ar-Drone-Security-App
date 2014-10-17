@@ -86,8 +86,8 @@ describe('Ar-Drone FlightCore module', function () {
 
     describe('drone flight queue', function () {
         var cQ,
-         takeOffCommand = {name:"Take Off", delay: 3000},
-         landCommand = {name:"Land", delay: 3000},
+         takeOffCommand = { name: "Take Off", type: 0, delay: 3000 },
+         landCommand = { name: "Land", type: 0, delay: 3000 },
          forwardCommand = {name: "Forward", delay: -1},
          backwardsCommand = {name: "Backwards", delay: -1},
          leftCommand = {name: "Left", delay: -1},
@@ -128,9 +128,9 @@ describe('Ar-Drone FlightCore module', function () {
             expect(cQ.data).to.include(landCommand);
         });
 
-        it('should throw an error, if an unknown command is added', function(){
-            var wrong = function(){ cQ.add("Stuff") };
-            expect(wrong).to.throw("Unknown Command!");
+        it('should return null, if an unknown command is added', function(){
+            var wrong = function(){ return cQ.add("Stuff") };
+            expect(cQ.add("Stuff")).to.not.be.ok;
         });
 
         it("would be able to remove the element from the queue after we added it there, and will return null if we try to remove non-existing element", function(){
