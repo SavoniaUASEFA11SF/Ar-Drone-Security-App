@@ -28,25 +28,25 @@
     // fly("forward")
     // fly("forward", 500)
     // fly({ angle: 120, duration: 500});
+    // TODO: rebuild into callback
     function fly(direction, delay)  {
       if (typeof direction === "string") {
-
         if ((direction !== "Forward") && (direction !== "Backwards") && (direction != "Left") && (direction != "Right")) {
-          return false;
+            return false;
         }
         if(delay === undefined)
-          $flightQueue.add(direction);
+            $flightQueue.add(direction);
         else
-          $flightQueue.add(direction, delay);
+            $flightQueue.add(direction, delay);
         return true;
         }
         //TODO: check the fact that angle and duration do exist! Otherwise, you get a thow TypeError, which is not what we want.
         if (!isNaN(direction.angle) && !isNaN(direction.duration))  {
-          $flightQueue.add("Custom Direction", direction);
-          return true;
+            $flightQueue.add("Custom Direction", direction);
+            return true;
+        }else{
+            return false;
         }
-        else
-          return false;
     }
     Node.fly = fly;
 
@@ -72,7 +72,7 @@
         $flightData.$udpController = control;
 
         if(error)
-          return false;
+            return false;
 
         stateControl.refreshIntervalId = setInterval(stateControl.refreshLoop, 1000);
         return true;
@@ -147,7 +147,7 @@
                   if (delay !== undefined)  {
                     this.data.push({ name: commandName, delay: delay });
                   }
-                  else 
+                  else
                     this.data.push(this.commands[i]);
 
                     break;
