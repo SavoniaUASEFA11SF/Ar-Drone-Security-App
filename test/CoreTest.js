@@ -128,8 +128,8 @@ describe('Ar-Drone FlightCore', function () {
         });
 
         it('should return null, if an unknown command is added', function(){
-            var wrong = function(){ return cQ.add("Stuff") };
-            expect(cQ.add("Stuff")).to.not.be.ok;
+            var wrong = function(){ return cQ.add("Stuff"); };
+            expect(wrong).to.throw(Error);
         });
 
         it("would be able to remove the element from the queue after we added it there, and will return null if we try to remove non-existing element", function(){

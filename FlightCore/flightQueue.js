@@ -5,6 +5,8 @@ module.exports = (function(){
     var flightQueue = function () {
         // All the commands currently in the queue
         this.data = [];
+        // Dispatch object
+        this.dispatch = null;
         // comman types:
         // @type 0 - essential command. Affects the whole
         // @type 1 -  direction command. Is supposed to have angle variable.
@@ -17,11 +19,17 @@ module.exports = (function(){
             { name: "Right",     type: 1,   angle: 90,   delay: -1}
         ];
 
+        this.init = function (dispatch){
+           if(dispatch !== undefined) 
+               this.dispatch = dispatch;
+           else
+               throw new Error('Tried to init flightQueue with no dispatch object!');
+        };
 
         // An outer access point for the queue. Add new command to the queue and let it handle the stuff.
         this.add = function (commandName, delay) {
               var foundCommand = false;
-                for (var i = 0; i < this.commands.length; i++) {
+              for (var i = 0; i < this.commands.length; i++) {
                     // if we found a command in the commands list
                     if (this.commands[i].name == commandName) {
                       // if it supplies a custom delay
@@ -29,7 +37,7 @@ module.exports = (function(){
                           this.data.push({ name: commandName, delay: delay });
                       else  // if it doesn't, just push it to the commands array.
                           this.data.push(this.commands[i]);
-
+                        foundCommand = true;
                         break;
                     }
                 }
@@ -39,8 +47,11 @@ module.exports = (function(){
                   // if the drone is already busy, then, well,
                   // we just leave and hope that callback will be there for us. Right? 
                   // If our command is urgent, let's force send it anyway.
-                  if((!$droneDispatch.isBusy()) || (this.data[0].type === 0))
-                    this.processCommand();
+                  if(this.dispatch)
+                      if((!$droneDispatch.isBusy()) || (this.data[0].type === 0))
+                        this.processCommand();
+                  else
+                      console.log('Well, we added stuff to the unInited flightQueue. Good for us, right.');
               }
 
         };
