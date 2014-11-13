@@ -77,13 +77,13 @@ describe('Ar-Drone FlightCore', function () {
         });
 
         it('should be running upon FlightCore init and have an "off" state', function () {
-            expect(FC.$flightState).to.exist;
-            expect(FC.$flightState.get()).to.equal('off');
+            expect(FC._stateManager).to.exist;
+            // expect(FC._stateMananger.get()).to.equal('off');
         });
     });
 
     describe('drone flight queue', function () {
-        var cQ, 
+        var cQ,
          takeOffCommand = { name: "Take Off", type: 0, delay: 3000 },
          landCommand = { name: "Land", type: 0, delay: 3000 },
          forwardCommand = {name: "Forward", delay: -1},
@@ -128,7 +128,7 @@ describe('Ar-Drone FlightCore', function () {
         });
 
         it('should return null, if an unknown command is added', function(){
-            var wrong = function(){ return cQ.add("Stuff"); };
+            var wrong = function(){ return cQ.add("Stuff") };
             expect(wrong).to.throw(Error);
         });
 

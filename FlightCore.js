@@ -16,35 +16,13 @@
 
     //Internal flight controlling methods
     var $flightData = {},
-        stateControl = new stateManager('off'),
-        $flightQueue = require('./FlightCore/flightQueue.js');
-
+        $flightQueue = require('./FlightCore/flightQueue.js'),
+        $stateManager = require('./FlightCore/stateManager.js');
 
     //A middleware between flight queue and drone. Uses state manager to control the situtation and make non-ambiguous decisions.
-    var $droneDispatch = {
-            process: function(command, callback){
-                //TODO.
-                // Logic for processing the fact that first we have to get into air
-                // Or fly straight on.
-                callback();
-            },
-            isBusy: function(){
-                if(stateControl.get() == 'takingOff' || stateControl.get() == 'landing')
-                    return true;
-                else
-                    return false;
-            },
-            isFlying: function(){
-                if(stateControl.get() == 'airborne')
-                    return true;
-                else
-                    return false;
-            }
-    };
-
+    var $droneDispatch = require('./FlightCore/flightDispatch.js');
     Node._flightData = $flightData;
-    Node.$flightState = stateControl;
-    Node.$droneDispatch = $droneDispatch;
+    Node._stateManager = $stateManager;
 
     Node.getFlightQueue = function () {
         return $flightQueue;
@@ -99,7 +77,7 @@
         if(error)
             return false;
 
-        stateControl.refreshIntervalId = setInterval(stateControl.refreshLoop, 1000);
+        stateManager.refreshIntervalId = setInterval(stateManager.refreshLoop, 1000);
         return true;
     }
 
