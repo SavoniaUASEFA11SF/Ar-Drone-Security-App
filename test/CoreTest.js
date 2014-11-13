@@ -6,7 +6,7 @@ var chai = require("chai"),
     should = chai.should(),
     FC = require("../FlightCore.js");
 
-describe('Ar-Drone FlightCore module', function () {
+describe('Ar-Drone FlightCore', function () {
     describe('upon initialization', function () {
 
         it('should have an empty flight data and flight control before initialization', function () {
@@ -19,8 +19,6 @@ describe('Ar-Drone FlightCore module', function () {
         });
 
         it('should have a flightQueue available as a singleton', function(){
-            FC.getFlightQueue().should.be.instanceOf(FC._flightQueue);
-
             //Check, if it's truly a singleton (i.e. the same object, no matter how much times you call for it)
             expect(FC.getFlightQueue()).to.be.equal(FC.getFlightQueue());
         });
@@ -73,7 +71,7 @@ describe('Ar-Drone FlightCore module', function () {
 
         it('should throw an error while setting its state to the unknown state.', function () {
             var stateMan = new FC._stateManager();
-            var setWrongState = function () { stateMan.set('stuff'); }
+            var setWrongState = function () { stateMan.set('stuff'); };
 
             expect(setWrongState).to.throw("Unknown state!");
         });
@@ -85,7 +83,7 @@ describe('Ar-Drone FlightCore module', function () {
     });
 
     describe('drone flight queue', function () {
-        var cQ,
+        var cQ, 
          takeOffCommand = { name: "Take Off", type: 0, delay: 3000 },
          landCommand = { name: "Land", type: 0, delay: 3000 },
          forwardCommand = {name: "Forward", delay: -1},
@@ -95,17 +93,18 @@ describe('Ar-Drone FlightCore module', function () {
 
 
 
-
         beforeEach(function(done){
-            //This will fail, until you actually create a _flightQueue function/class.
-             cQ = new FC._flightQueue();
+            cQ = require('../FlightCore/flightQueue.js');
+            // Make sure the data is empty,as we can't really prevent node from caching stuff for us.
+            cQ.data = [];
             done();
         });
 
         it('should successfully instantiate the queue and its data should be an empty array.', function () {
             expect(cQ).to.not.be.undefined;
             expect(cQ.data).to.exist;
-            expect(cQ.data).to.be.empty;
+            expect(cQ.data.length).to.be.empty;
+          //  expect(cQ.data.length).to.equal(0);
         });
 
         it('should have an array of predefined commands, with takeoff and land commands with 3 sec delay defined.', function(){
