@@ -10,54 +10,43 @@
  */
 
 
-(function () {
-    ///Slight sugar for ease of definition
-    var Node = module.exports;
+module.exports = (function () {
 
     //Internal flight controlling methods
-    var $flightData = {},
-        $flightQueue = require('./FlightCore/flightQueue.js'),
-        $stateManager = require('./FlightCore/stateManager.js');
+    var $flightData     = {},
+        $flightQueue    = require('./FlightCore/flightQueue.js'),
+        $flightDispatch = require('./FlightCore/flightDispatch.js'),
+        $flightState   = require('./FlightCore/flightState.js');
 
-    //A middleware between flight queue and drone. Uses state manager to control the situtation and make non-ambiguous decisions.
-    var $droneDispatch = require('./FlightCore/flightDispatch.js');
-    Node._flightData = $flightData;
-    Node._stateManager = $stateManager;
-
-    Node.getFlightQueue = function () {
-        return $flightQueue;
-    };
 
     // fly("forward")
     // fly("forward", 500)
     // fly({ angle: 120, duration: 500});
     // TODO: rebuild into callback
-    function fly(direction, delay)  {
-      if (typeof direction === "string") {
-        if ((direction !== "Forward") && (direction !== "Backwards") && (direction != "Left") && (direction != "Right")) {
-            return false;
-        }
-        if(delay === undefined)
-            $flightQueue.add(direction);
-        else
-            $flightQueue.add(direction, delay);
-        return true;
+    var fly = function (direction, delay) {
+        if (typeof direction === "string") {
+            if ((direction !== "Forward") && (direction !== "Backwards") && (direction != "Left") && (direction != "Right")) {
+                return false;
+            }
+            if (delay === undefined)
+                $flightQueue.add(direction); else
+                $flightQueue.add(direction, delay);
+            return true;
         }
         //TODO: check the fact that angle and duration do exist! Otherwise, you get a thow TypeError, which is not what we want.
-        if (!isNaN(direction.angle) && !isNaN(direction.duration))  {
+        if (!isNaN(direction.angle) && !isNaN(direction.duration)) {
             $flightQueue.add("Custom Direction", direction);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-    Node.fly = fly;
 
     // Initialize drone variables and connection here.
-    function init() {
+    var init = function () {
         var arDrone = {},
             control = {},
-            error  = null;
+            error = null;
 
         try {
             arDrone = require('ar-drone');
@@ -74,51 +63,29 @@
         $flightData.$arDrone = arDrone;
         $flightData.$udpController = control;
 
-        if(error)
+        if (error)
             return false;
 
         stateManager.refreshIntervalId = setInterval(stateManager.refreshLoop, 1000);
         return true;
     }
 
+
+    Node._flightData = $flightData;
+    Node._flightState = $flightState;
     Node.init = init;
+    Node.fly = fly;
 
-    // Singleton for the state control
-    function stateManager(state) {
+    Node.getFlightQueue = function () {
+        return $flightQueue;
+    };
 
-        //Allowed states:
-        this.states = ['off', 'takingOff', 'airborne', 'landing'];
-        //The state to be executed
-        this.currentState = null;
-        //future container for the refresh interval id, which is needed to stop the refresh loop
-        this.refreshIntervalId = null;
-
-        if (state === undefined || (this.states.indexOf(state) === -1))
-            this.currentState = 'off';
-        else
-            this.currentState = state;
-        ///Will be instantiated for each object, but we have singleton, so no problem there.
-        this.get = function () {
-            return this.currentState;
-        };
-        this.set = function (newState) {
-            var ref  = $flightData.$ref,
-                pcmd = $flightData.$pcmd;
-
-            if (this.states.indexOf(newState) === -1){
-                throw new Error("Unknown state!");
-            }
-
-            //Translate the state information into ref and pcmd object
-           this.currentState = newState;
-        };
-       //Send our pcmd and ref packages to drone controller
-        this.processDroneData = function(){
-           $flightData.$udpController.ref($flightData.$ref);
-           $flightData.$udpController.pcmd($flightData.$pcmd);
-
-        };
+    return {
+        fly: fly,
+        init: init,
+        // For unit-testing purposes only:
+        $flightQueue: $flightQueue,
+        $flightDispatch: $flightDispatch,
+        $flightState: $flightState
     }
-
-    Node._stateManager = stateManager;
 })();
