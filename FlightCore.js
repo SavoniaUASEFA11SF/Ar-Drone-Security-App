@@ -24,19 +24,26 @@ module.exports = (function () {
     // fly({ angle: 120, duration: 500});
     // TODO: rebuild into callback
     var fly = function (direction, delay) {
+
         if (typeof direction === "string") {
+
             if ((direction !== "Forward") && (direction !== "Backwards") && (direction != "Left") && (direction != "Right")) {
                 return false;
             }
+
             if (delay === undefined)
-                $flightQueue.add(direction); else
+                $flightQueue.add(direction);
+            else
                 $flightQueue.add(direction, delay);
             return true;
         }
         //TODO: check the fact that angle and duration do exist! Otherwise, you get a thow TypeError, which is not what we want.
+
         if (!isNaN(direction.angle) && !isNaN(direction.duration)) {
+
             $flightQueue.add("Custom Direction", direction);
             return true;
+
         } else {
             return false;
         }
