@@ -40,6 +40,10 @@ module.exports = (function () {
         currentState = newState;
     };
 
+    var broadcast = function () {
+        $control.flush();
+    };
+
     return {
         set: set,
         get: get,
