@@ -15,7 +15,7 @@ module.exports = (function () {
     //Internal flight controlling methods
    var  $flightQueue    = require('./FlightCore/flightQueue.js'),
         $flightDispatch = require('./FlightCore/flightDispatch.js'),
-        $flightState   = require('./FlightCore/flightState.js');
+        $flightState   = require('./FlightCore/flightState.js'),
         conf = {
             dispatchProcessRate: 100 // ms
         };

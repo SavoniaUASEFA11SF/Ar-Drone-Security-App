@@ -5,36 +5,40 @@
 
 module.exports = (function () {
 
-    var flightDispatch = function () {
 
-        this.flightState = require("./flightState.js");
-        this.flightQueue = null;
+    var flightState = require("./flightState.js"),
+        flightQueue = require("./flightQueue.js"),
 
-        this.init = function ( flightQueue, conf ) {
-           this.flightQueue = flightQueue;
+        init = function (conf) {
+            if (flightState.error)
+                return flightState.error;
 
-           setInterval(this.process, conf.dispatchProcessRate);
-        };
+            setInterval(this.process, conf.dispatchProcessRate);
+            return null;
+        },
 
-        this.process = function () {
+        process = function () {
 
-        };
+        },
 
-        this.isBusy = function () {
-            if (this.flightState.get() == 'takingOff' || this.flightState.get() == 'landing')
-                return true; 
+        isBusy = function () {
+            if (flightState.get() == 'takingOff' || flightState.get() == 'landing')
+                return true;
+            else
+                return false;
+        },
+
+        isFlying = function () {
+            if (flightState.get() == 'airborne')
+                return true;
             else
                 return false;
         };
 
-        this.isFlying = function () {
-            if (this.flightState.get() == 'airborne')
-                return true; 
-            else
-                return false;
-        };
+    return {
+        isBusy  : isBusy,
+        isFlying: isFlying,
+        init    : init
     };
-
-    return new flightDispatch();
 
 }());
