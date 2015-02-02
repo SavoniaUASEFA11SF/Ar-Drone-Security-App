@@ -7,30 +7,30 @@ module.exports = (function () {
 
     var flightDispatch = function () {
 
-        this.stateManager = null;
+        this.flightState = require("./flightState.js");
+        this.flightQueue = null;
 
-        this.init = function (stateManager) {
-            if (stateManager !== undefined)
-                this.stateManager = stateManager; else
-                throw new Error('Tried to init flightDispatch without stateManager');
+        this.init = function ( flightQueue, conf ) {
+           this.flightQueue = flightQueue;
+
+           setInterval(this.process, conf.dispatchProcessRate);
         };
 
-        this.process = function (command, callback) {
-            //TODO.
-            // Logic for processing the fact that first we have to get into air
-            // Or fly straight on.
-            callback();
+        this.process = function () {
+
         };
 
         this.isBusy = function () {
-            if (this.stateManager.get() == 'takingOff' || this.stateManager.get() == 'landing')
-                return true; else
+            if (this.flightState.get() == 'takingOff' || this.flightState.get() == 'landing')
+                return true; 
+            else
                 return false;
         };
 
         this.isFlying = function () {
-            if (this.stateManager.get() == 'airborne')
-                return true; else
+            if (this.flightState.get() == 'airborne')
+                return true; 
+            else
                 return false;
         };
     };

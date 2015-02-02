@@ -13,10 +13,12 @@
 module.exports = (function () {
 
     //Internal flight controlling methods
-    var $flightData     = {},
-        $flightQueue    = require('./FlightCore/flightQueue.js'),
+   var  $flightQueue    = require('./FlightCore/flightQueue.js'),
         $flightDispatch = require('./FlightCore/flightDispatch.js'),
         $flightState   = require('./FlightCore/flightState.js');
+        conf = {
+            dispatchProcessRate: 100 // ms
+        };
 
     // fly("forward")
     // fly("forward", 500)
@@ -77,11 +79,7 @@ module.exports = (function () {
         return true;
     };
 
-    Node._flightState = $flightState;
-    Node.init = init;
-    Node.fly = fly;
-
-    Node.getFlightQueue = function () {
+    var getFlightQueue = function () {
         return $flightQueue;
     };
 
@@ -91,6 +89,7 @@ module.exports = (function () {
         // For unit-testing purposes only:
         $flightQueue: $flightQueue,
         $flightDispatch: $flightDispatch,
-        $flightState: $flightState
+        $flightState: $flightState,
+        getFlightQueue: getFlightQueue
     };
 })();

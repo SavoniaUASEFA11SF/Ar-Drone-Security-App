@@ -29,7 +29,7 @@ module.exports = (function () {
             //Translate the state information into ref and pcmd object
             this.currentState = newState;
         };
-    }
+    };
 
 
     return new flightState();
