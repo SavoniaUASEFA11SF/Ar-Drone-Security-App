@@ -14,8 +14,8 @@ module.exports = (function() {
           return this.currentState;
       };
       this.set = function (newState) {
-          var ref  = $flightData.$ref,
-              pcmd = $flightData.$pcmd;
+         // var ref  = $flightData.$ref,
+         //    pcmd = $flightData.$pcmd;
 
           if (this.states.indexOf(newState) === -1){
               throw new Error("Unknown state!");
@@ -24,7 +24,7 @@ module.exports = (function() {
           //Translate the state information into ref and pcmd object
          this.currentState = newState;
       };
-    }
+    };
 
 
     return new stateManager();

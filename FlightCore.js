@@ -19,6 +19,7 @@
         $flightQueue = require('./FlightCore/flightQueue.js'),
         $stateManager = require('./FlightCore/stateManager.js');
 
+
     //A middleware between flight queue and drone. Uses state manager to control the situtation and make non-ambiguous decisions.
     var $droneDispatch = require('./FlightCore/flightDispatch.js');
     Node._flightData = $flightData;
@@ -33,16 +34,20 @@
     // fly({ angle: 120, duration: 500});
     // TODO: rebuild into callback
     function fly(direction, delay)  {
-      if (typeof direction === "string") {
-        if ((direction !== "Forward") && (direction !== "Backwards") && (direction != "Left") && (direction != "Right")) {
-            return false;
+        if (typeof direction === "string") {
+            if ((direction !== "Forward") && (direction !== "Backwards") && (direction != "Left") && (direction != "Right")) {
+                return false;
+            }
+
+            if(delay === undefined){
+                $flightQueue.add(direction);
+                return true;
+            } else {
+                $flightQueue.add(direction, delay);
+                return true;
+            }
         }
-        if(delay === undefined)
-            $flightQueue.add(direction);
-        else
-            $flightQueue.add(direction, delay);
-        return true;
-        }
+
         //TODO: check the fact that angle and duration do exist! Otherwise, you get a thow TypeError, which is not what we want.
         if (!isNaN(direction.angle) && !isNaN(direction.duration))  {
             $flightQueue.add("Custom Direction", direction);
@@ -54,7 +59,7 @@
     Node.fly = fly;
 
     // Initialize drone variables and connection here.
-    function init() {
+    var init = function () {
         var arDrone = {},
             control = {},
             error  = null;
@@ -63,7 +68,7 @@
             arDrone = require('ar-drone');
             control = arDrone.createUdpControl();
         } catch (err) {
-            console.log(" _init error: " + err.message);
+            console.log("------------------------------------------- _init error: " + err.message);
             error = err;
         }
 
@@ -77,48 +82,9 @@
         if(error)
             return false;
 
-        stateManager.refreshIntervalId = setInterval(stateManager.refreshLoop, 1000);
+        $stateManager.refreshIntervalId = setInterval($stateManager.refreshLoop, 1000);
         return true;
-    }
+    };
 
     Node.init = init;
-
-    // Singleton for the state control
-    function stateManager(state) {
-
-        //Allowed states:
-        this.states = ['off', 'takingOff', 'airborne', 'landing'];
-        //The state to be executed
-        this.currentState = null;
-        //future container for the refresh interval id, which is needed to stop the refresh loop
-        this.refreshIntervalId = null;
-
-        if (state === undefined || (this.states.indexOf(state) === -1))
-            this.currentState = 'off';
-        else
-            this.currentState = state;
-        ///Will be instantiated for each object, but we have singleton, so no problem there.
-        this.get = function () {
-            return this.currentState;
-        };
-        this.set = function (newState) {
-            var ref  = $flightData.$ref,
-                pcmd = $flightData.$pcmd;
-
-            if (this.states.indexOf(newState) === -1){
-                throw new Error("Unknown state!");
-            }
-
-            //Translate the state information into ref and pcmd object
-           this.currentState = newState;
-        };
-       //Send our pcmd and ref packages to drone controller
-        this.processDroneData = function(){
-           $flightData.$udpController.ref($flightData.$ref);
-           $flightData.$udpController.pcmd($flightData.$pcmd);
-
-        };
-    }
-
-    Node._stateManager = stateManager;
 })();

@@ -29,7 +29,7 @@ describe('Ar-Drone FlightCore', function () {
     describe('Drone command facades', function(){
        describe('fly() facade', function(){
 
-         it('should return false and not throw an error, if called with no arguments',function(){
+         it('should return false and not throw an error, if called with no arguments', function () {
             var fly_Empty = function(){
                 return FC.fly();
             };
@@ -49,16 +49,19 @@ describe('Ar-Drone FlightCore', function () {
     });
 
     describe('state manager', function () {
+        var stateMan;
+
+        beforeEach( function (done) {
+           stateMan = require('./../FlightCore/stateManager.js');
+           done(); 
+        });
 
         it('should have get/set functions', function () {
-            var stateMan = new FC._stateManager;
-
             stateMan.should.respondTo('get');
             stateMan.should.respondTo('set');
         });
 
         it('should succesfully set its own state, if it exists in a set of allowed states', function () {
-            var stateMan = new FC._stateManager();
 
             /* Iterate over every state in the array of allowed states,
              *  set it as current state and check, if get() returns the selected allowed state.
@@ -70,7 +73,6 @@ describe('Ar-Drone FlightCore', function () {
         });
 
         it('should throw an error while setting its state to the unknown state.', function () {
-            var stateMan = new FC._stateManager();
             var setWrongState = function () { stateMan.set('stuff'); };
 
             expect(setWrongState).to.throw("Unknown state!");
