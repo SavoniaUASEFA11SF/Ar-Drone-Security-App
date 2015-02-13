@@ -9,6 +9,7 @@ module.exports = (function () {
     // The state being on right now
     var $arDrone = null,
         $control = null,
+        data     = { ref: {}, pcmd: {} },
         error    = null;
 
     try {
@@ -27,12 +28,12 @@ module.exports = (function () {
     };
 
     var set = function (ref, pcmd) {
-        var $ref = ref,
-            $pcmd = pcmd;
+        data.ref = ref,
+        data.pcmd = pcmd;
 
         if ($control) {
-           $control.ref($ref);
-           $control.pcmd($pcmd); 
+           $control.ref(data.ref);
+           $control.pcmd(data.pcmd);
         } else {
             throw new Error("The control module does not exist! Darn it.");
         }
@@ -45,6 +46,9 @@ module.exports = (function () {
     return {
         set: set,
         get: get,
+        getData: function () {
+            return data;
+        },
         error: error
     };
 }());

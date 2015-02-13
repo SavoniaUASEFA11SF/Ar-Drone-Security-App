@@ -40,17 +40,18 @@ describe('Ar-Drone FlightCore', function () {
         });
     });
 
-    describe('state manager', function () {
+    describe('Flight state', function () {
         var flightState;
 
         beforeEach(function (done) {
             flightState = require('./../FlightCore/flightState.js');
             done();
         });
+
         afterEach(function (done) {
             delete require.cache[require.resolve('./../FlightCore/flightState.js')];
             done();
-        })
+        });
 
         it('should have get/set functions', function () {
             flightState.should.respondTo('get');
@@ -58,7 +59,7 @@ describe('Ar-Drone FlightCore', function () {
         });
     });
 
-    describe('drone flight queue', function () {
+    describe('Drone flight queue', function () {
         var cQ,
             takeOffCommand = { name: "Take Off", type: 0, delay: 3000 },
             landCommand        = { name: "Land", type: 0, delay: 3000 },
@@ -130,5 +131,51 @@ describe('Ar-Drone FlightCore', function () {
             cQ.add("Right");
             cQ.data.length.should.be.equal(4);
         });
+    });
+
+    describe('Flight dispatch', function () {
+        var flightDisp;
+
+        beforeEach( function (done) {
+            flightDisp = require('../FlightCore/flightDispatch.js');
+            done();
+        });
+
+        afterEach(function (done) {
+            delete require.cache[require.resolve('../FlightCore/flightDispatch.js')];
+            done();
+        });
+
+        it('should have a flightState param as an object', function () {
+            expect(flightDisp.flightState).to.be.an('object');
+        })
+
+        it('process a given forward command in a way that its flightState would have non-empty ref and pcmd data objects afterwards', function () {
+            var cmd    = { name: "Forward", type: 1, angle: 0, delay: -1},
+                fstate = flightDisp.flightState,
+                fdata;
+
+            flightDisp.process(cmd);
+
+            fdata = fstate.getData();
+            expect(fdata.ref).to.be.ok;
+            expect(fdata.pcmd).to.be.ok;
+
+            fdata.ref.should.not.be.empty;
+            fdata.pcmd.should.not.be.empty;
+        });
+
+        it('should have right parameters in ref and pcmd', function() {
+            var fstate = flightDisp.flightState,
+                fdata;
+
+            flightDisp.process({ name: "Forward", type: 1, angle: 0, delay: -1 });
+
+            fdata = fstate.getData();
+
+            expect(fdata.ref).to.eql({fly : true, emergency : false });
+            expect(fdata.pcmd).to.eql({front : 1, up: 0 });
+
+        })
     });
 });

@@ -18,7 +18,7 @@ module.exports = (function () {
         },
 
         process = function () {
-
+            
         },
 
         isBusy = function () {
@@ -36,9 +36,11 @@ module.exports = (function () {
         };
 
     return {
-        isBusy  : isBusy,
-        isFlying: isFlying,
-        init    : init
+        isBusy      : isBusy,
+        isFlying    : isFlying,
+        init        : init,
+        flightState : flightState,
+        process: process
     };
 
 }());
