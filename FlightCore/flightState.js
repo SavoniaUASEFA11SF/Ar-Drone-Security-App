@@ -34,10 +34,8 @@ module.exports = (function () {
            $control.ref($ref);
            $control.pcmd($pcmd); 
         } else {
-            error.push("The control module does not exist! Darn it.");
-            throw error;
+            throw new Error("The control module does not exist! Darn it.");
         }
-
     };
 
     var broadcast = function () {

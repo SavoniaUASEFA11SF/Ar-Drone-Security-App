@@ -37,15 +37,10 @@ module.exports = (function () {
             else
                 $flightQueue.add(direction, delay);
             return true;
-        }
-
-        //TODO: check the fact that angle and duration do exist! Otherwise, you get a thow TypeError, which is not what we want.
-
-        if (!isNaN(direction.angle) && !isNaN(direction.duration)) {
+        } else if (typeof direction === "object") {
 
             $flightQueue.add("Custom Direction", direction);
             return true;
-
         } else {
             return false;
         }
@@ -53,30 +48,9 @@ module.exports = (function () {
 
     // Initialize drone variables and connection here.
     var init = function () {
-        var arDrone = {},
-            control = {},
-            error = null;
 
-        try {
-            arDrone = require('ar-drone');
-            control = arDrone.createUdpControl();
-        } catch (err) {
-            console.log("------------------------------------------- _init error: " + err.message);
-            error = err;
-        }
+        return $flightDispatch.init( { dispatchProcessRate: 100 });
 
-        //ref object
-        $flightData.$ref = {};
-        $flightData.$pcmd = {};
-
-        $flightData.$arDrone = arDrone;
-        $flightData.$udpController = control;
-
-        if (error)
-            return false;
-
-        $stateManager.refreshIntervalId = setInterval($stateManager.refreshLoop, 1000);
-        return true;
     };
 
     var getFlightQueue = function () {
@@ -87,7 +61,6 @@ module.exports = (function () {
         fly: fly,
         init: init,
         // For unit-testing purposes only:
-        $flightQueue: $flightQueue,
         $flightDispatch: $flightDispatch,
         $flightState: $flightState,
         getFlightQueue: getFlightQueue
