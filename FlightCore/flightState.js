@@ -6,11 +6,8 @@
 
 module.exports = (function () {
 
-    // Allowed states:
-    var states = ['off', 'takingOff', 'airborne', 'landing'],
     // The state being on right now
-        currentState = 'off',
-        $arDrone = null,
+    var $arDrone = null,
         $control = null,
         error    = null;
 
@@ -26,18 +23,21 @@ module.exports = (function () {
 
     // Will be instantiated for each object, but we have singleton, so no problem there.
     var get = function () {
-        return currentState;
+        return $control;
     };
 
-    var set = function (newState) {
-        var ref = $flightData.$ref, pcmd = $flightData.$pcmd;
+    var set = function (ref, pcmd) {
+        var $ref = ref,
+            $pcmd = pcmd;
 
-        if (states.indexOf(newState) === -1) {
-            throw new Error("Unknown state!");
+        if ($control) {
+           $control.ref($ref);
+           $control.pcmd($pcmd); 
+        } else {
+            error.push("The control module does not exist! Darn it.");
+            throw error;
         }
 
-        //Translate the state information into ref and pcmd object
-        currentState = newState;
     };
 
     var broadcast = function () {
