@@ -30,7 +30,7 @@ describe('Ar-Drone FlightCore', function () {
        describe('fly() facade', function(){
 
          it('should return false and not throw an error, if called with no arguments', function () {
-            var fly_Empty = function(){
+            var fly_Empty = function () {
                 return FC.fly();
             };
             expect(fly_Empty).to.not.throw(Error);
@@ -117,7 +117,7 @@ describe('Ar-Drone FlightCore', function () {
         it('should have add and remove methods to add and remove commands from the current queue.', function(){
             expect(cQ).to.respondTo('add');
             expect(cQ).to.respondTo('remove');
-        })
+        });
 
         it('would accept addition of TakeOff and Land commands, after which the commands should be in its data array', function(){
             cQ.add("Take Off");
