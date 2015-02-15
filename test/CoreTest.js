@@ -134,7 +134,9 @@ describe('Ar-Drone FlightCore', function () {
     });
 
     describe('Flight dispatch', function () {
-        var flightDisp;
+        var flightDisp,
+            forwardCmd    = { name: "Forward", type: 1, angle: 0, delay: -1},
+            backCmd       = { name: "Backward", type: 1, angle: 180, delay: -1};
 
         beforeEach( function (done) {
             flightDisp = require('../FlightCore/flightDispatch.js');
@@ -150,12 +152,11 @@ describe('Ar-Drone FlightCore', function () {
             expect(flightDisp.flightState).to.be.an('object');
         })
 
-        it('process a given forward command in a way that its flightState would have non-empty ref and pcmd data objects afterwards', function () {
-            var cmd    = { name: "Forward", type: 1, angle: 0, delay: -1},
-                fstate = flightDisp.flightState,
+        it('would process a given forward command so that its flightState would have non-empty ref and pcmd data objects.', function () {
+            var fstate = flightDisp.flightState,
                 fdata;
 
-            flightDisp.process(cmd);
+            flightDisp.process(forwardCmd);
 
             fdata = fstate.getData();
             expect(fdata.ref).to.be.ok;
@@ -165,17 +166,34 @@ describe('Ar-Drone FlightCore', function () {
             fdata.pcmd.should.not.be.empty;
         });
 
-        it('should have right parameters in ref and pcmd', function() {
-            var fstate = flightDisp.flightState,
-                fdata;
+        describe('should have correct ref and pcmd while issued with', function () {
 
-            flightDisp.process({ name: "Forward", type: 1, angle: 0, delay: -1 });
+            it('forward command', function() {
+                var fstate = flightDisp.flightState,
+                    fdata;
 
-            fdata = fstate.getData();
+                flightDisp.process(forwardCmd);
 
-            expect(fdata.ref).to.eql({fly : true, emergency : false });
-            expect(fdata.pcmd).to.eql({front : 1, up: 0 });
+                fdata = fstate.getData();
 
-        })
+                expect(fdata.ref).to.eql({fly : true, emergency : false });
+                expect(fdata.pcmd).to.eql({front : 1, up: 0 });
+
+            });
+
+            it('backward command', function() {
+                var fstate = flightDisp.flightState,
+                    fdata;
+
+                flightDisp.process(backCmd);
+
+                fdata = fstate.getData();
+
+                expect(fdata.ref).to.eql({fly : true, emergency : false });
+                expect(fdata.pcmd).to.eql({front : -1, up: 0 });
+                // TODO check if the -1 is the proper one
+
+            });
+        });
     });
 });
