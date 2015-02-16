@@ -13,8 +13,12 @@ setTimeout(function(){
 }, 1000);
 
 setTimeout(function(){
-  pcmd({front: 0.4});
+  pcmd = {front: 0.1};
 }, 5000);
+
+setTimeout( function () {
+    pcmd = {front: 0.0};
+}, 8000);
 
 setTimeout(function(){
   console.log('Landing ...');
@@ -27,3 +31,8 @@ setInterval(function(){
   control.pcmd(pcmd);
   control.flush();
 }, 30);
+
+setTimeout( function () {
+   control.ref({fly: false});
+   return;
+})
