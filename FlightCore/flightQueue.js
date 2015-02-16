@@ -7,14 +7,16 @@ module.exports = (function () {
         this.data = [];
         // Dispatch object
         this.dispatch = null;
-        // comman types:
+        // comman types:x
         // @type 0 - essential command. Affects the whole
         // @type 1 -  direction command. Is supposed to have angle variable.
+        // @type 2 -  turn command. Is supposed to have angle variable, commanded manually.
         this.commands = [
             { name: "Take Off", type: 0, delay: 3000 },
             { name: "Land", type: 0, delay: 3000 },
+            { name: "Turn", type: 2, delay: 1000}, // ???
             { name: "Forward", type: 1, angle: 0, delay: -1},
-            { name: "Backwards", type: 1, angle: 180, delay: -1},
+            { name: "Backward", type: 1, angle: 180, delay: -1},
             { name: "Left", type: 1, angle: 270, delay: -1},
             { name: "Right", type: 1, angle: 90, delay: -1}
         ];
